@@ -14,3 +14,10 @@ _book
 *.epub
 *.mobi
 *.pdf
+*.docx
+
+.git*
+*~
+*.*~
+*.pyc
+*.idea

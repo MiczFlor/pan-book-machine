@@ -1,0 +1,68 @@
+/* This defines styles and classes used in the book */
+body { 
+    margin: 5%; 
+    text-align: left; 
+    font-size: medium; 
+    font-family: sans-serif;
+}
+code { font-family: monospace; }
+h1 { text-align: left; }
+h2 { text-align: left; }
+h3 { text-align: left; }
+h4 { text-align: left; }
+h5 { text-align: left; }
+h6 { text-align: left; }
+/* title page */
+h1.title { text-align: center;}
+p.subtitle { 
+    text-align:center; 
+    margin-bottom: 2em;
+    padding-bottom: 2em;
+    border-bottom: 4px solid #000000;
+}
+p.author { 
+    text-align:center; 
+    margin-bottom: 2em;
+    padding-bottom: 2em;
+    border-bottom: 4px solid #000000;
+}
+p.publisher {
+    text-align:center; 
+    margin-top: 4em;
+}
+p.rights {
+    text-align:center; 
+}
+p.date { 
+    text-align:center; 
+}
+
+ol.toc { padding: 0; margin-left: 1em; }
+ol.toc li { list-style-type: none; margin: 0; padding: 0; }
+em, em em em, em em em em em { font-style: italic;}
+em em, em em em em { font-style: normal; }
+body#cover, 
+div#cover-image,
+div#cover-image img {
+    margin: 0;
+    padding: 0;
+}
+/* footnotes */
+a.footnoteRef { 
+    vertical-align: super; 
+    font-size: 0.5em;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    font-weight: bold;
+}
+/* caption */
+.caption {
+    font-size: 0.8em;
+    font-style: italic;
+}
+/* blockquote */
+blockquote {
+    font-style: italic;
+    
+}
+

@@ -1,0 +1,12 @@
+---
+geometry: "top=2.5cm, bottom=3.5cm, left=3cm, right=2cm"
+papersize: a4
+documentclass: book
+lang: "de"
+toc: true
+toc-depth: 0
+fontsize: 11pt
+mainfont: "Lato"
+header-includes:
+- \usepackage{csquotes}
+...
