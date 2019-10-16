@@ -27,7 +27,7 @@ if [ ! -d "${folderName}" ]; then
     cp 00-PanBookMachine-boilerplate/cli_pandocEbook.sh "${folderName}"/
     mkdir "${folderName}"/CONTENT
     mkdir "${folderName}"/CONFIG
-    cp -R 00-PanBookMachine-boilerplate/misc/examples/CONFIG/* "${folderName}"/CONFIG/
+    cp -R 00-PanBookMachine-boilerplate/CONFIG/* "${folderName}"/CONFIG/
     # replace book name with given folder name
     sed -i 's/%TargetBook%/'"${folderName}"'/' "${folderName}"/CONFIG/book.conf
     mkdir "${folderName}"/misc
