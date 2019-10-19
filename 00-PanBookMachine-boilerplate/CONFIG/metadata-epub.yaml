@@ -1,5 +1,5 @@
 
 ---
 stylesheet: ../CONFIG/ebook.css
-#cover-image: ../cover.jpg
+cover-image: ../CONFIG/coverEpub.jpg
 ---

@@ -8,6 +8,10 @@
 #
 # CONFIG/book.conf
 #
+# For general improvements, please create pull requests
+# only for changes inside the folder
+# 00-PanBookMachine-boilerplate
+#
 ###########################################################
 
 # clean files: remove all files with ~ at the end
@@ -18,6 +22,23 @@ find . -type f -name '*~' -exec rm -f '{}' \;
 PATHDATA="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # read book metadata / configuration
 . "${PATHDATA}/CONFIG/book.conf"
+
+#################################
+# Prepare some parameter settings
+
+if [ $NUMBERSECTIONS == "TRUE" ]; then
+    paramNUMBERSECTIONS="--number-sections"
+else
+    paramNUMBERSECTIONS=""
+fi
+
+if [ $TOC == "TRUE" ]; then
+    paramTOC="--toc -V toc-depth:${TOCDEPTH}"
+else
+    paramTOC=""
+fi
+
+# sed -i 's/%TargetBook%/'"${folderName}"'/' "${folderName}"/CONFIG/book.conf
 
 #############################
 # Merge all MD files into one
@@ -44,45 +65,34 @@ pandoc --file-scope -o "CONTENT/T-E-M-P-${BOOKFILENAME}.md" "tmp/T-E-M-P-${BOOKF
 cd CONTENT
 
 # PDF
-if [ $PDF == "TRUE" ]
-then
+if [ $PDF == "TRUE" ]; then
 echo "Making PDF"
-pandoc -s --file-scope --pdf-engine=xelatex --from markdown --listings -o "../${BOOKFILENAME}.pdf" ../CONFIG/metadata-info.yaml ../CONFIG/metadata-pdf.yaml "T-E-M-P-${BOOKFILENAME}.md" 
+pandoc -s ${paramTOC} ${paramNUMBERSECTIONS} --file-scope --pdf-engine=xelatex --from markdown --listings -o "../${BOOKFILENAME}.pdf" ../CONFIG/metadata-info.yaml ../CONFIG/metadata-pdf.yaml "T-E-M-P-${BOOKFILENAME}.md" 
 fi
 
 # EPUB
-if [ $EPUB == "TRUE" ]
-then
+if [ $EPUB == "TRUE" ]; then
 echo "Making EPUB"
-pandoc -s --file-scope --from markdown --listings  -o "../${BOOKFILENAME}.epub" ../CONFIG/metadata-info.yaml ../CONFIG/metadata-epub.yaml "T-E-M-P-${BOOKFILENAME}.md"
+pandoc -s ${paramNUMBERSECTIONS} --file-scope --from markdown -o "../${BOOKFILENAME}.epub" ../CONFIG/metadata-info.yaml ../CONFIG/metadata-epub.yaml "T-E-M-P-${BOOKFILENAME}.md"
 fi
 
 # Word DOCX
-if [ $DOCX == "TRUE" ]
-then
+if [ $DOCX == "TRUE" ]; then
 echo "Making DOCX"
-pandoc -s  --toc --file-scope --from markdown --listings -o "../${BOOKFILENAME}.docx" ../CONFIG/metadata-info.yaml "T-E-M-P-${BOOKFILENAME}.md"
+pandoc -s ${paramTOC} ${paramNUMBERSECTIONS} --file-scope --from markdown -o "../${BOOKFILENAME}.docx" ../CONFIG/metadata-info.yaml "T-E-M-P-${BOOKFILENAME}.md"
 fi
 
 # HTML snippet .htm
-if [ $HTM == "TRUE" ]
-then
+if [ $HTM == "TRUE" ]; then
 echo "Making HTML snippet"
-pandoc --file-scope --from markdown --listings -o "../${BOOKFILENAME}.htm" ../CONFIG/metadata-info.yaml "T-E-M-P-${BOOKFILENAME}.md"
+pandoc --file-scope --from markdown -o "../${BOOKFILENAME}.htm" ../CONFIG/metadata-info.yaml "T-E-M-P-${BOOKFILENAME}.md"
 fi
 
 # HTML standalone .html
-if [ $HTML == "TRUE" ]
-then
+if [ $HTML == "TRUE" ]; then
 echo "Making HTML standalone"
-pandoc -s  --toc --file-scope --from markdown --listings -o "../${BOOKFILENAME}.html" ../CONFIG/metadata-info.yaml "T-E-M-P-${BOOKFILENAME}.md"
+pandoc -s ${paramTOC} ${paramNUMBERSECTIONS} --file-scope --from markdown -o "../${BOOKFILENAME}.html" ../CONFIG/metadata-info.yaml "T-E-M-P-${BOOKFILENAME}.md"
 fi
-
-#pandoc -s --toc -o ${BOOKFILENAME}.tex 00metadata-info.yaml 00metadata-pdf.yaml Document-ALL.md --from markdown --template eisvogel --listings
-#pandoc -s --toc -o ${BOOKFILENAME}.pdf 00metadata-info.yaml 00metadata-pdf.yaml Document-ALL.md --from markdown --template eisvogel --listings
-#pandoc -s -o ${BOOKFILENAME}.pdf 00metadata-info.yaml 00metadata-pdf.yaml Document-ALL.md --from markdown --listings
-
-#pandoc -s -o ${BOOKFILENAME}.epub 00metadata-info.yaml 00metadata-epub.yaml Document-ALL.md
 
 # REMOVE temporary files
 rm "T-E-M-P-${BOOKFILENAME}.md"

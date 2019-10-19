@@ -1,7 +1,7 @@
 
 # Lists
 
-### Bullet lists ###
+## Bullet lists ##
 
 A bullet list is a list of bulleted list items.  A bulleted list
 item begins with a bullet (`*`, `+`, or `-`).  Here is a simple
@@ -90,7 +90,7 @@ bad but is legal.
 Second paragraph of second
 list item.
 
-### Ordered lists ###
+## Ordered lists
 
 Ordered lists work just like bulleted lists, except that the items
 begin with enumerators rather than bullets.
@@ -160,7 +160,7 @@ Pandoc supports task lists, using the syntax of GitHub-Flavored Markdown.
 - [ ] an unchecked task list item
 - [x] checked item
 
-### Definition lists ###
+## Definition lists
 
 #### Extension: `definition_lists` ####
 
@@ -252,7 +252,7 @@ list marker.  That is, example lists always behave as if the
 labels tend to be long, and indenting content to the
 first non-space character after the label would be awkward.
 
-### Compact and loose lists ###
+## Compact and loose lists
 
 Pandoc behaves differently from `Markdown.pl` on some "edge
 cases" involving lists.  Consider this source:
@@ -277,7 +277,7 @@ behavior is consistent with the official Markdown syntax description,
 even though it is different from that of `Markdown.pl`.)
 
 
-### Ending a list ###
+## Ending a list
 
 What if you want to put an indented code block after a list?
 
