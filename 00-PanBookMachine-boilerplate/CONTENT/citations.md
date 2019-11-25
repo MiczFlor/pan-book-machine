@@ -1,5 +1,7 @@
 # Pandoc with citeproc-hs
 
+Find information about BibTex and the .bib file format here: [http://www.bibtex.org/](http://www.bibtex.org/)
+
 -   [@nonexistent]
 
 -   @nonexistent
