@@ -6,12 +6,12 @@ body {
     font-family: sans-serif;
 }
 code { font-family: monospace; }
-h1 { text-align: left; }
-h2 { text-align: left; }
-h3 { text-align: left; }
-h4 { text-align: left; }
-h5 { text-align: left; }
-h6 { text-align: left; }
+h1 { text-align: left; font-size: 1.8em; }
+h2 { text-align: left; font-size: 1.4em; }
+h3 { text-align: left; font-size: 1.3em; }
+h4 { text-align: left; font-size: 1.2em; }
+h5 { text-align: left; font-size: 1.1em; }
+h6 { text-align: left; font-size: 1em; }
 /* title page */
 h1.title { text-align: center;}
 p.subtitle { 
@@ -50,10 +50,20 @@ div#cover-image img {
 /* footnotes */
 a.footnoteRef { 
     vertical-align: super; 
-    font-size: 0.5em;
+    font-size: 0.7em;
     margin-left: 0.5em;
     margin-right: 0.5em;
     font-weight: bold;
+}
+a.footnote-ref { 
+    vertical-align: super; 
+    font-size: 0.7em;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    font-weight: bold;
+}
+a.footnote-back {
+    margin-left: 0.5em;
 }
 /* caption */
 .caption {

@@ -2,8 +2,8 @@
 geometry: "top=2.5cm, bottom=2cm, left=2.5cm, right=2.5cm"
 papersize: a4
 documentclass: book
-mainfont: "Lato"
 fontsize: 10pt
-header-includes:
-- \usepackage{csquotes}
+mainfont: TeX Gyre Pagella
+sansfont: TeX Gyre Adventor
+monofont: TeX Gyre Cursor
 ...
