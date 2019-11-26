@@ -38,6 +38,17 @@ else
     paramTOC=""
 fi
 
+if [ $CITATIONSUSE == "TRUE" ]; then
+    if [ $CSLUSE == "TRUE" ]; then
+        paramCSL="--csl ${CSLPATHREL}${CSLFILE}"
+    else
+        paramCSL=""
+    fi
+    paramCITE="--bibliography ${CITATIONSPATHREL}${CITATIONSFILE} --filter pandoc-citeproc ${paramCSL}"
+else
+    paramCITE=""
+fi
+
 # sed -i 's/%TargetBook%/'"${folderName}"'/' "${folderName}"/CONFIG/book.conf
 
 #############################
@@ -50,7 +61,6 @@ fi
 # see: https://github.com/jgm/pandoc/wiki/Pandoc-Tricks#repeated-footnotes-anchors-and-headers-across-multiple-files
 #
 # 3. Convert 
-
 
 # 1. Merge markdown files with appended line breaks
 for f in CONTENT/*.md ; do sed -e '$s/$/\n\n/' $f ; done > "tmp/T-E-M-P-${BOOKFILENAME}-intermediate.md"
@@ -67,31 +77,31 @@ cd CONTENT
 # PDF
 if [ $PDF == "TRUE" ]; then
 echo "Making PDF"
-pandoc -s ${paramTOC} ${paramNUMBERSECTIONS} --file-scope --bibliography ../CONFIG/biblio.bib --filter pandoc-citeproc --pdf-engine=xelatex --from markdown+header_attributes -H ../CONFIG/header.tex --listings -o "../${BOOKFILENAME}.pdf" ../CONFIG/metadata-info.yaml ../CONFIG/metadata-pdf.yaml "T-E-M-P-${BOOKFILENAME}.md" 
+pandoc -s ${paramTOC} ${paramNUMBERSECTIONS} ${paramCITE} --file-scope ${paramCITE} --pdf-engine=xelatex --from markdown+header_attributes -H ../CONFIG/header.tex --listings -o "../${BOOKFILENAME}.pdf" ../CONFIG/metadata-info.yaml ../CONFIG/metadata-pdf.yaml "T-E-M-P-${BOOKFILENAME}.md" 
 fi
 
 # EPUB
 if [ $EPUB == "TRUE" ]; then
 echo "Making EPUB"
-pandoc -s ${paramNUMBERSECTIONS} --file-scope --bibliography ../CONFIG/biblio.bib --filter pandoc-citeproc --from markdown -o "../${BOOKFILENAME}.epub" ../CONFIG/metadata-info.yaml ../CONFIG/metadata-epub.yaml "T-E-M-P-${BOOKFILENAME}.md"
+pandoc -s ${paramNUMBERSECTIONS} --file-scope ${paramCITE} --from markdown -o "../${BOOKFILENAME}.epub" ../CONFIG/metadata-info.yaml ../CONFIG/metadata-epub.yaml "T-E-M-P-${BOOKFILENAME}.md"
 fi
 
 # Word DOCX
 if [ $DOCX == "TRUE" ]; then
 echo "Making DOCX"
-pandoc -s ${paramTOC} ${paramNUMBERSECTIONS} --file-scope --bibliography ../CONFIG/biblio.bib --filter pandoc-citeproc --from markdown -o "../${BOOKFILENAME}.docx" ../CONFIG/metadata-info.yaml "T-E-M-P-${BOOKFILENAME}.md"
+pandoc -s ${paramTOC} ${paramNUMBERSECTIONS} --file-scope ${paramCITE} --from markdown -o "../${BOOKFILENAME}.docx" ../CONFIG/metadata-info.yaml "T-E-M-P-${BOOKFILENAME}.md"
 fi
 
 # HTML snippet .htm
 if [ $HTM == "TRUE" ]; then
 echo "Making HTML snippet"
-pandoc --file-scope --bibliography ../CONFIG/biblio.bib --filter pandoc-citeproc --from markdown -o "../${BOOKFILENAME}.htm" ../CONFIG/metadata-info.yaml "T-E-M-P-${BOOKFILENAME}.md"
+pandoc --file-scope ${paramCITE} --from markdown -o "../${BOOKFILENAME}.htm" ../CONFIG/metadata-info.yaml "T-E-M-P-${BOOKFILENAME}.md"
 fi
 
 # HTML standalone .html
 if [ $HTML == "TRUE" ]; then
 echo "Making HTML standalone"
-pandoc -s ${paramTOC} ${paramNUMBERSECTIONS} --file-scope --bibliography ../CONFIG/biblio.bib --filter pandoc-citeproc --from markdown -o "../${BOOKFILENAME}.html" ../CONFIG/metadata-info.yaml "T-E-M-P-${BOOKFILENAME}.md"
+pandoc -s ${paramTOC} ${paramNUMBERSECTIONS} --file-scope ${paramCITE} --from markdown -o "../${BOOKFILENAME}.html" ../CONFIG/metadata-info.yaml "T-E-M-P-${BOOKFILENAME}.md"
 fi
 
 # REMOVE temporary files

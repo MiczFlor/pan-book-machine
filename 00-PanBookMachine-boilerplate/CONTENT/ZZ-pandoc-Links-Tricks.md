@@ -1,5 +1,5 @@
 
-# Links to PanDoc resources, tutorials, tricks
+# Links to PanDoc resources, tutorials, tricks{#links}
 
 Official PanDoc repo wiki:
 
@@ -12,25 +12,23 @@ Other:
 * [Generate PDF invoices from Markdown using Pandoc by Martin Betz](https://martinbetz.eu/articles/pandoc-invoices)
 * [sample pandoc-generated PDF font examples](https://github.com/danstoner/pandoc_samples)
 * [Customizing pandoc to generate beautiful pdfs from markdown by learnbyexample](https://learnbyexample.github.io/tutorial/ebook-generation/customizing-pandoc/)
-    * Installation
-    * Minimal example
-    * Chapter breaks
-    * Changing settings via -V option
-    * Syntax highlighting
-    * Bullet styling
-    * PDF properties
-    * Adding table of contents
-    * Resource links
-    * From Markdown, To Markdown
-    * Template Snippet
-    * YAML Metadata for Any Format
-    * Left-aligning Tables in LaTeX
-    * GFM Task Lists with Pandoc
-    * Today in date metadata
-    * Definition list terms on their own line in LaTeX
-    * Level 4 and 5 headings on their own line in LaTeX
 * [GERMAN: Pandoc Dokumente konvertieren von Stefan Baireuther](https://www.baireuther.de/page/pandoc/)
+
+Academic writing:
+
+* [How to use Pandoc to produce a research paper by  Kiko Fernandez-Reyes](https://opensource.com/article/18/9/pandoc-research-paper)
+* [Bibliographies and Citations by Yiyi Wang](https://github.com/shd101wyy/markdown-preview-enhanced/blob/master/docs/pandoc-bibliographies-and-citations.md)
 * [Markdown containing into a formatted scholarly paper by Kieran Healy](https://kieranhealy.org/blog/archives/2014/01/23/plain-text/)
+
+# Formatting of citations and bibliographies
+
+* [Citation Style Language to facilitate scholarly publishing by automating the formatting](https://citationstyles.org/)
+
+Referencing inside the document
+
+[pandoc-crossref is a pandoc filter for numbering figures, equations, tables and cross-references to them.](https://github.com/lierdakil/pandoc-crossref)
+
+* [pandoc-crossref: pandoc-crossref is a pandoc filter for numbering figures, equations, tables and cross-references to them.](http://lierdakil.github.io/pandoc-crossref/)
 
 ## Templates
 
