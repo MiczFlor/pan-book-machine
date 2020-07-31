@@ -4,5 +4,5 @@ subtitle: 'Rendering many formats from one book'
 author: 'Micz Flor'
 publisher:  'https://github.com/MiczFlor/pan-book-machine/'
 lang: 'de'
-date: 9. August 2019
+date: %TODAY%
 ...

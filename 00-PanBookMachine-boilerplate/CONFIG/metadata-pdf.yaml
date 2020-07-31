@@ -4,6 +4,4 @@ papersize: a4
 documentclass: book
 fontsize: 10pt
 mainfont: TeX Gyre Pagella
-sansfont: TeX Gyre Adventor
-monofont: TeX Gyre Cursor
 ...

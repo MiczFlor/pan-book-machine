@@ -51,57 +51,74 @@ fi
 
 # sed -i 's/%TargetBook%/'"${folderName}"'/' "${folderName}"/CONFIG/book.conf
 
-#############################
+#########################################################
 # Merge all MD files into one
 #
 # 1. pandoc requires an empty line before starting a new chapter with #
 # so we append two line breaks using sed
 #
-# 2. create intermediate file using --file-scope to avoid confusion of auto-identifiers
+# 2. Replace strings with special vars in content and metadata 
+# 
+# 3. create intermediate file using --file-scope to avoid confusion of auto-identifiers
 # see: https://github.com/jgm/pandoc/wiki/Pandoc-Tricks#repeated-footnotes-anchors-and-headers-across-multiple-files
 #
-# 3. Convert 
+# 4. Convert 
 
 # 1. Merge markdown files with appended line breaks
 for f in CONTENT/*.md ; do sed -e '$s/$/\n\n/' $f ; done > "tmp/T-E-M-P-${BOOKFILENAME}-intermediate.md"
 
-# 2. Intermediate markdown file using --file-scope
+#########################################################
+# 2. Special variables 
+# Now special variables, like the current date, will be replaces in the file and variable names (like book title)
+# First we need to make copies of the metadata files to be used for replacement
+cp CONFIG/metadata-info.yaml tmp/metadata-info.yaml
+
+# Available variables:
+
+# %TODAY% => current date
+# Change the variables LANG_LOCALE and DATE_FORMAT in the file CONFIG/book.conf
+TODAY=$(LC_ALL=${LANG_LOCALE}.utf8 date +"${DATE_FORMAT}")
+sed -i "s/%TODAY%/${TODAY}/g" "tmp/T-E-M-P-${BOOKFILENAME}-intermediate.md"
+sed -i "s/%TODAY%/${TODAY}/g" tmp/metadata-info.yaml
+
+#########################################################
+# 3. Intermediate markdown file using --file-scope
 # we render this file into CONTENT - to keep the relative paths in place
 pandoc --file-scope -o "CONTENT/T-E-M-P-${BOOKFILENAME}.md" "tmp/T-E-M-P-${BOOKFILENAME}-intermediate.md"
 
-# 3. Convert 
+#########################################################
+# 4. Convert 
 # Now we move into the CONTENT folder to keep relative paths intact (img etc.)
-
 cd CONTENT
 
 # PDF
 if [ $PDF == "TRUE" ]; then
 echo "Making PDF"
-pandoc -s ${paramTOC} ${paramNUMBERSECTIONS} ${paramCITE} --file-scope ${paramCITE} --pdf-engine=xelatex --from markdown+header_attributes -H ../CONFIG/header.tex --listings -o "../${BOOKFILENAME}.pdf" ../CONFIG/metadata-info.yaml ../CONFIG/metadata-pdf.yaml "T-E-M-P-${BOOKFILENAME}.md" 
+pandoc -s ${paramTOC} ${paramNUMBERSECTIONS} ${paramCITE} --file-scope --pdf-engine=xelatex --from markdown+header_attributes -H ../CONFIG/header.tex --listings -o "../${BOOKFILENAME}.pdf" ../tmp/metadata-info.yaml ../CONFIG/metadata-pdf.yaml "T-E-M-P-${BOOKFILENAME}.md" 
 fi
 
 # EPUB
 if [ $EPUB == "TRUE" ]; then
 echo "Making EPUB"
-pandoc -s ${paramNUMBERSECTIONS} --file-scope ${paramCITE} --from markdown -o "../${BOOKFILENAME}.epub" ../CONFIG/metadata-info.yaml ../CONFIG/metadata-epub.yaml "T-E-M-P-${BOOKFILENAME}.md"
+pandoc -s ${paramNUMBERSECTIONS} --file-scope ${paramCITE} --from markdown -o "../${BOOKFILENAME}.epub" ../tmp/metadata-info.yaml ../CONFIG/metadata-epub.yaml "T-E-M-P-${BOOKFILENAME}.md"
 fi
 
 # Word DOCX
 if [ $DOCX == "TRUE" ]; then
 echo "Making DOCX"
-pandoc -s ${paramTOC} ${paramNUMBERSECTIONS} --file-scope ${paramCITE} --from markdown -o "../${BOOKFILENAME}.docx" ../CONFIG/metadata-info.yaml "T-E-M-P-${BOOKFILENAME}.md"
+pandoc -s ${paramTOC} ${paramNUMBERSECTIONS} --file-scope ${paramCITE} --from markdown -o "../${BOOKFILENAME}.docx" ../tmp/metadata-info.yaml "T-E-M-P-${BOOKFILENAME}.md"
 fi
 
 # HTML snippet .htm
 if [ $HTM == "TRUE" ]; then
 echo "Making HTML snippet"
-pandoc --file-scope ${paramCITE} --from markdown -o "../${BOOKFILENAME}.htm" ../CONFIG/metadata-info.yaml "T-E-M-P-${BOOKFILENAME}.md"
+pandoc --file-scope ${paramCITE} --from markdown -o "../${BOOKFILENAME}.htm" ../tmp/metadata-info.yaml "T-E-M-P-${BOOKFILENAME}.md"
 fi
 
 # HTML standalone .html
 if [ $HTML == "TRUE" ]; then
 echo "Making HTML standalone"
-pandoc -s ${paramTOC} ${paramNUMBERSECTIONS} --file-scope ${paramCITE} --from markdown -o "../${BOOKFILENAME}.html" ../CONFIG/metadata-info.yaml "T-E-M-P-${BOOKFILENAME}.md"
+pandoc -s ${paramTOC} ${paramNUMBERSECTIONS} --file-scope ${paramCITE} --from markdown -o "../${BOOKFILENAME}.html" ../tmp/metadata-info.yaml "T-E-M-P-${BOOKFILENAME}.md"
 fi
 
 # REMOVE temporary files
