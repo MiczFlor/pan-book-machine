@@ -52,3 +52,16 @@ The resulting files will be placed in the book directory.
 to contribute new code to the git repo. All the files you need to edit are inside the folder of your
 new book directory.
 
+## Managing images
+
+Renaming all files to .jpg and .png
+
+~~~
+rename 's/\.jpeg/\.jpg/' *.jpeg; rename 's/\.JPG/\.jpg/' *.JPG; rename 's/\.JPEG/\.jpg/' *.JPEG; rename 's/\.PNG/\.png/' *.PNG
+~~~
+
+On linux systems, you can convert all .png files into .jpg file with quality 90 with this command:
+
+~~~
+for f in *.png; do convert -quality 90 "$f" "${f/%png/jpg}"; done
+~~~

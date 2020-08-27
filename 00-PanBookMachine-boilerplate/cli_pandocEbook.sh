@@ -20,8 +20,29 @@ find . -type f -name '*~' -exec rm -f '{}' \;
 # The absolute path to the folder whjch contains all the scripts.
 # Unless you are working with symlinks, leave the following line untouched.
 PATHDATA="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-# read book metadata / configuration
+
+#########################################################
+# Special variables 
+# Now special variables, like the current date, will be replaces in the file and variable names (like book title)
+# First we need to make copies of the metadata files to be used for replacement
+cp CONFIG/metadata-info.yaml tmp/metadata-info.yaml
+cp CONFIG/book.conf tmp/book.conf
+# read original book.conf for date format
 . "${PATHDATA}/CONFIG/book.conf"
+
+# Available variables:
+
+# %TODAY% & %TODAYFILE% => current date
+# Change the variables LANG_LOCALE and DATE_FORMAT in the file CONFIG/book.conf
+TODAY=$(LC_ALL=${LANG_LOCALE}.utf8 date +"${DATE_FORMAT}")
+sed -i "s/%TODAY%/${TODAY}/g" tmp/metadata-info.yaml
+sed -i "s/%TODAY%/${TODAY}/g" tmp/book.conf
+TODAYFILE=$(LC_ALL=${LANG_LOCALE}.utf8 date +"${DATE_FORMAT_FILE}")
+sed -i "s/%TODAYFILE%/${TODAYFILE}/g" tmp/metadata-info.yaml
+sed -i "s/%TODAYFILE%/${TODAYFILE}/g" tmp/book.conf
+
+# read book metadata / configuration
+. "${PATHDATA}/tmp/book.conf"
 
 #################################
 # Prepare some parameter settings
@@ -64,22 +85,14 @@ fi
 #
 # 4. Convert 
 
+#########################################################
 # 1. Merge markdown files with appended line breaks
 for f in CONTENT/*.md ; do sed -e '$s/$/\n\n/' $f ; done > "tmp/T-E-M-P-${BOOKFILENAME}-intermediate.md"
 
 #########################################################
-# 2. Special variables 
-# Now special variables, like the current date, will be replaces in the file and variable names (like book title)
-# First we need to make copies of the metadata files to be used for replacement
-cp CONFIG/metadata-info.yaml tmp/metadata-info.yaml
-
-# Available variables:
-
-# %TODAY% => current date
-# Change the variables LANG_LOCALE and DATE_FORMAT in the file CONFIG/book.conf
-TODAY=$(LC_ALL=${LANG_LOCALE}.utf8 date +"${DATE_FORMAT}")
+# 2. Replace strings with special vars in content and metadata 
 sed -i "s/%TODAY%/${TODAY}/g" "tmp/T-E-M-P-${BOOKFILENAME}-intermediate.md"
-sed -i "s/%TODAY%/${TODAY}/g" tmp/metadata-info.yaml
+sed -i "s/%TODAYFILE%/${TODAYFILE}/g" "tmp/T-E-M-P-${BOOKFILENAME}-intermediate.md"
 
 #########################################################
 # 3. Intermediate markdown file using --file-scope

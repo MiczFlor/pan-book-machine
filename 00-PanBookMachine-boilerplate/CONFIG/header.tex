@@ -1,10 +1,34 @@
-\usepackage{csquotes}
-\usepackage{color}
-\usepackage[medium]{titlesec} % big, medium, small, or tiny
-\usepackage{sectsty}
 
+% Context sensitive quotation facilities
+% https://ctan.org/pkg/csquotes
+\usepackage{csquotes} 
+
+% Colour control for LaTeX documents
+% https://ctan.org/pkg/color
+% \usepackage{color} 
+
+% Select alternative section titles
+% https://ctan.org/pkg/titlesec
+% A package providing an interface to sectioning commands for selection
+% from various title styles. E.g., marginal titles and to change the
+% font of all headings with a single command, also providing simple
+% one-step page styles.
+\usepackage[small]{titlesec} % big, medium, small, or tiny
+
+% Control sectional headers
+% https://ctan.org/pkg/sectsty
+% The secsty package provides a set of commands for changing the font
+% used for the various sectional headings in the standard LATEX 2ε
+% documentclasses:article, book, and report.
+% \usepackage{sectsty}
+
+% CAPTION documentation: 
+% https://ctan.org/pkg/caption
+\usepackage{caption}
+\captionsetup[figure]{font=footnotesize} % figure caption font size from smallest to largest: scriptsize footnotesize small normalsize large Large
+% \captionsetup[figure]{labelformat=empty} % suppress the "figure" text and numbering in caption
 % optionally uncomment the following line (info beneath the line)
-%\sectionfont{\clearpage}
+% \sectionfont{\clearpage}
 % IF documentclass: article in metadata-pdf.yaml this will create page breaks for top level titles (chapter)
 % IF documentclass: book in metadata-pdf.yaml this will create page breaks for chapter and section titles
 
