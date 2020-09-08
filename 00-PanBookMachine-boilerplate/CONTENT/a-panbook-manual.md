@@ -23,7 +23,7 @@ tutorials, tricks, information.
 
 To create a new book, **go into the `pan-book-machine` and type:**
 
-~~~{.cpp}
+~~~
 ./cli_createBook.sh
 ~~~
 
@@ -58,6 +58,25 @@ Then this one master file is used to create the book.
 
 If you want to use images in a subfolder, do so inside the `CONTENT` folder. 
 `pan-book-machine` will work with relative paths from inside that folder.
+
+### Special variables replace on output creation
+
+Sometimes you want to have dynamic changes in your final document when you create it.
+The most common example: inserting the current date.
+
+There are a number of variables which can be used. Here a list with info.
+
+IMPORTANT: when using these variables, drop the backslash. The backslash has only been added so that the generated files will not dynamically replace the variable in this documentation. Example: "`\%TODAY\%`" is actually "`percent-TODAY-percent`".
+
+**Date formats**
+
+There are two date variables available:
+
+* `\%TODAYFILE\%` is the more mechanical looking, e.g. `20200131` (January 31st, 2020)
+* `\%TODAY\%` is human readable, e.g. `01. Juli 2020` (July 1st, 2020 in German)
+    * Both date formats can be customised in the `book.conf` file.
+    * Here you also have to set the language, e.g. `LANG_LOCALE="de_DE"` for German.
+    * You can use these variables in all your content, inside `metadata-info.yaml` and `book.conf` (e.g. to add the current date to the filename)
 
 ### Create formatted book
 

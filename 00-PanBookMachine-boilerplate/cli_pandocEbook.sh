@@ -106,19 +106,19 @@ cd CONTENT
 
 # PDF
 if [ $PDF == "TRUE" ]; then
-echo "Making PDF"
+echo "Generating PDF"
 pandoc -s ${paramTOC} ${paramNUMBERSECTIONS} ${paramCITE} --file-scope --pdf-engine=xelatex --from markdown+header_attributes -H ../CONFIG/header.tex --listings -o "../${BOOKFILENAME}.pdf" ../tmp/metadata-info.yaml ../CONFIG/metadata-pdf.yaml "T-E-M-P-${BOOKFILENAME}.md" 
 fi
 
 # EPUB
 if [ $EPUB == "TRUE" ]; then
-echo "Making EPUB"
+echo "Generating EPUB"
 pandoc -s ${paramNUMBERSECTIONS} --file-scope ${paramCITE} --from markdown -o "../${BOOKFILENAME}.epub" ../tmp/metadata-info.yaml ../CONFIG/metadata-epub.yaml "T-E-M-P-${BOOKFILENAME}.md"
 fi
 
 # Word DOCX
 if [ $DOCX == "TRUE" ]; then
-echo "Making DOCX"
+echo "Generating DOCX"
 pandoc -s ${paramTOC} ${paramNUMBERSECTIONS} --file-scope ${paramCITE} --from markdown -o "../${BOOKFILENAME}.docx" ../tmp/metadata-info.yaml "T-E-M-P-${BOOKFILENAME}.md"
 fi
 
@@ -130,8 +130,20 @@ fi
 
 # HTML standalone .html
 if [ $HTML == "TRUE" ]; then
-echo "Making HTML standalone"
+echo "Generating HTML standalone"
 pandoc -s ${paramTOC} ${paramNUMBERSECTIONS} --file-scope ${paramCITE} --from markdown -o "../${BOOKFILENAME}.html" ../tmp/metadata-info.yaml "T-E-M-P-${BOOKFILENAME}.md"
+fi
+
+# Markdown
+if [ $MARKDOWN == "TRUE" ]; then
+echo "Generating Markdown"
+pandoc -s ${paramTOC} ${paramNUMBERSECTIONS} --file-scope ${paramCITE} -t markdown --from markdown -o "../${BOOKFILENAME}.md" ../tmp/metadata-info.yaml "T-E-M-P-${BOOKFILENAME}.md"
+fi
+
+# Plain Text
+if [ $PLAINTXT == "TRUE" ]; then
+echo "Generating Plain Text"
+pandoc -s ${paramTOC} ${paramNUMBERSECTIONS} --file-scope ${paramCITE} -t plain --from markdown -o "../${BOOKFILENAME}.txt" ../tmp/metadata-info.yaml "T-E-M-P-${BOOKFILENAME}.md"
 fi
 
 # REMOVE temporary files

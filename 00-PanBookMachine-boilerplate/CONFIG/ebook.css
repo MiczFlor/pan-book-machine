@@ -66,13 +66,13 @@ a.footnote-back {
     margin-left: 0.5em;
 }
 /* caption */
-.caption {
-    font-size: 0.8em;
+.caption,
+figcaption {
+    font-size: 0.7em;
     font-style: italic;
 }
 /* blockquote */
 blockquote {
-    font-style: italic;
-    
+    font-style: italic;    
 }
 

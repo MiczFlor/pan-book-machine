@@ -1,4 +1,11 @@
 
+% formatting footnotes like numbered lists at bottom of the page
+\usepackage{scrextend}
+% Here are a couple of footnote layouts to play with:
+%\deffootnote{1em}{2em}{\thefootnotemark\ }
+\deffootnote{2em}{1.6em}{\thefootnotemark\hspace{0.7em}}
+%\deffootnote{2em}{2em}{\makebox[1.5em][l]{\thefootnotemark}} 
+
 % Context sensitive quotation facilities
 % https://ctan.org/pkg/csquotes
 \usepackage{csquotes} 
