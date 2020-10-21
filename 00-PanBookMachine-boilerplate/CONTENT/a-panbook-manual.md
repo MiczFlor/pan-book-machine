@@ -1,3 +1,11 @@
+---
+title: 'Single file Pan-Book Machine Manual'
+subtitle: 'Title rendered from file metadata'
+author: 'Micz Flor'
+publisher:  'https://github.com/MiczFlor/pan-book-machine/'
+lang: 'de'
+date: %TODAY%
+...
 
 # Why use (and how to configure) Pan-Book-Machine
 
@@ -48,18 +56,17 @@ CONFIG/metadata-info.yaml
 
 To make the output match your information (title and the like)
 
-### Edit the content of your new book
+## Edit the content of your new book
 
-All the markdown files with an ending `.md` are merged into one big file in alphanumerical order.
-
-Then this one master file is used to create the book.
+Your content lives in the folder `CONTENT`.
+The files which will be used to render the book, must have the file ending `.md`.
 
 **Including images**
 
 If you want to use images in a subfolder, do so inside the `CONTENT` folder. 
 `pan-book-machine` will work with relative paths from inside that folder.
 
-### Special variables replace on output creation
+## Special variables replaced on output creation
 
 Sometimes you want to have dynamic changes in your final document when you create it.
 The most common example: inserting the current date.
@@ -78,7 +85,7 @@ There are two date variables available:
     * Here you also have to set the language, e.g. `LANG_LOCALE="de_DE"` for German.
     * You can use these variables in all your content, inside `metadata-info.yaml` and `book.conf` (e.g. to add the current date to the filename)
 
-### Create formatted book
+## Create formatted book
 
 **Inside your book folder, run the command:**
 
@@ -103,6 +110,41 @@ There are a number of format specific configuration files such as:
 
 * `CONFIG/metadata-pdf.yaml`
 * `CONFIG/metadata-epub.yaml`
+
+## Single file or multiple files?
+
+There are two options of generating *a* book - or many single documents.
+Inside `CONFIG/book.conf` you can set the variable `MERGE` to achieve the following:
+
+*MERGE is "TRUE"*
+
+All the markdown files with an ending `.md` are merged into one big file in alphanumerical order.
+
+Then this one master file is used to create the book.
+
+*MERGE is "FALSE"*
+
+A single document is being created from every file ending with `.md`.
+The created file has the same filename as the `.md` file.
+The new file ending will - obviously - correspond to the output format.
+
+**IMPORTANT**:
+If you chose to create single files, you can add the metadata for each file in the head of the `.md` document.
+If you do not add any, there will be no meta information in the created output format.
+You can use the variables listed below to be replaced when running PanBookMachine.
+
+This file, for example, contains the metadata:
+
+~~~
+---
+title: 'Single file Pan-Book Machine Manual'
+subtitle: 'Title rendered from file metadata'
+author: 'Micz Flor'
+publisher:  'https://github.com/MiczFlor/pan-book-machine/'
+lang: 'de'
+date: %TODAY%
+...
+~~~
 
 ## ePUB cover (e-book)
 

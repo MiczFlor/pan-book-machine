@@ -17,9 +17,87 @@
 # clean files: remove all files with ~ at the end
 find . -type f -name '*~' -exec rm -f '{}' \;
 
-# The absolute path to the folder whjch contains all the scripts.
+# The absolute path to the folder which contains all the scripts.
 # Unless you are working with symlinks, leave the following line untouched.
 PATHDATA="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+
+# funtion to render documents
+render_documents () {
+
+    ls -l
+    ls -l tmp/
+
+    #########################################################
+    # 2. Replace strings with special vars in content and metadata 
+    sed -i "s/%TODAY%/${TODAY}/g" "tmp/T-E-M-P-${BOOKFILENAME}-intermediate.md"
+    sed -i "s/%TODAYFILE%/${TODAYFILE}/g" "tmp/T-E-M-P-${BOOKFILENAME}-intermediate.md"
+    
+    #########################################################
+    # 3. Intermediate markdown file using --file-scope (for merged document integrity)
+    # we render this file into CONTENT - to keep the relative paths in place
+    # WARNING: --file-scope is not run IF single files are generated, 
+    # because the integrity of each file is assumed. If we were to run it,
+    # the metadata YAML of the single file disappears.
+    if [ $MERGE == "TRUE" ]; then
+        pandoc --file-scope -o "CONTENT/T-E-M-P-${BOOKFILENAME}.md" "tmp/T-E-M-P-${BOOKFILENAME}-intermediate.md"
+    else
+        cp "tmp/T-E-M-P-${BOOKFILENAME}-intermediate.md" "CONTENT/T-E-M-P-${BOOKFILENAME}.md"
+    fi
+    #########################################################
+    # 4. Convert 
+    # Now we move into the CONTENT folder to keep relative paths intact (img etc.)
+    cd CONTENT
+    head "T-E-M-P-${BOOKFILENAME}.md"
+
+    # PDF
+    if [ $PDF == "TRUE" ]; then
+    echo "Generating PDF"
+    pandoc -s ${paramTOC} ${paramNUMBERSECTIONS} ${paramCITE} --file-scope --pdf-engine=xelatex --from markdown+header_attributes -H ../CONFIG/header.tex --listings -o "../${BOOKFILENAME}.pdf" ${METADATAINFO} ../CONFIG/metadata-pdf.yaml "T-E-M-P-${BOOKFILENAME}.md" 
+    fi
+    
+    # EPUB
+    if [ $EPUB == "TRUE" ]; then
+    echo "Generating EPUB"
+    pandoc -s ${paramNUMBERSECTIONS} --file-scope ${paramCITE} --from markdown -o "../${BOOKFILENAME}.epub" ${METADATAINFO} ../CONFIG/metadata-epub.yaml "T-E-M-P-${BOOKFILENAME}.md"
+    fi
+    
+    # Word DOCX
+    if [ $DOCX == "TRUE" ]; then
+    echo "Generating DOCX"
+    pandoc -s ${paramTOC} ${paramNUMBERSECTIONS} --file-scope ${paramCITE} --from markdown -o "../${BOOKFILENAME}.docx" ${METADATAINFO} "T-E-M-P-${BOOKFILENAME}.md"
+    fi
+    
+    # HTML snippet .htm
+    if [ $HTM == "TRUE" ]; then
+    echo "Making HTML snippet"
+    pandoc --file-scope ${paramCITE} --from markdown -o "../${BOOKFILENAME}.htm" ${METADATAINFO} "T-E-M-P-${BOOKFILENAME}.md"
+    fi
+    
+    # HTML standalone .html
+    if [ $HTML == "TRUE" ]; then
+    echo "Generating HTML standalone"
+    pandoc -s ${paramTOC} ${paramNUMBERSECTIONS} --file-scope ${paramCITE} --from markdown -o "../${BOOKFILENAME}.html" ${METADATAINFO} "T-E-M-P-${BOOKFILENAME}.md"
+    fi
+    
+    # Markdown
+    if [ $MARKDOWN == "TRUE" ]; then
+    echo "Generating Markdown"
+    pandoc -s ${paramTOC} ${paramNUMBERSECTIONS} --file-scope ${paramCITE} -t markdown --from markdown -o "../${BOOKFILENAME}.md" ${METADATAINFO} "T-E-M-P-${BOOKFILENAME}.md"
+    fi
+    
+    # Plain Text
+    if [ $PLAINTXT == "TRUE" ]; then
+    echo "Generating Plain Text"
+    pandoc -s ${paramTOC} ${paramNUMBERSECTIONS} --file-scope ${paramCITE} -t plain --from markdown -o "../${BOOKFILENAME}.txt" ${METADATAINFO} "T-E-M-P-${BOOKFILENAME}.md"
+    fi
+    
+    # REMOVE temporary files
+    rm "T-E-M-P-${BOOKFILENAME}.md"
+    cd ..
+    rm tmp/T-E-M-P-${BOOKFILENAME}-intermediate.md
+
+}
 
 #########################################################
 # Special variables 
@@ -86,66 +164,45 @@ fi
 # 4. Convert 
 
 #########################################################
-# 1. Merge markdown files with appended line breaks
-for f in CONTENT/*.md ; do sed -e '$s/$/\n\n/' $f ; done > "tmp/T-E-M-P-${BOOKFILENAME}-intermediate.md"
+# 1. preparing md docs (append empty line, opt. merge)
 
-#########################################################
-# 2. Replace strings with special vars in content and metadata 
-sed -i "s/%TODAY%/${TODAY}/g" "tmp/T-E-M-P-${BOOKFILENAME}-intermediate.md"
-sed -i "s/%TODAYFILE%/${TODAYFILE}/g" "tmp/T-E-M-P-${BOOKFILENAME}-intermediate.md"
+echo Merge ${MERGE}
 
-#########################################################
-# 3. Intermediate markdown file using --file-scope
-# we render this file into CONTENT - to keep the relative paths in place
-pandoc --file-scope -o "CONTENT/T-E-M-P-${BOOKFILENAME}.md" "tmp/T-E-M-P-${BOOKFILENAME}-intermediate.md"
+# Merge files into one document (TRUE) or keep separate (FALSE)
+if [ $MERGE == "TRUE" ]; then
+    echo "Merge into single file"
+    
+    # We want the master metadata in the merged document
+    METADATAINFO="../tmp/metadata-info.yaml"
+    
+    # 1. Merge markdown files with appended line breaks
+    for f in CONTENT/*.md ; do sed -e '$s/$/\n\n/' "$f" ; done > "tmp/T-E-M-P-${BOOKFILENAME}-intermediate.md"
 
-#########################################################
-# 4. Convert 
-# Now we move into the CONTENT folder to keep relative paths intact (img etc.)
-cd CONTENT
+    # Call function to render documents
+    render_documents
 
-# PDF
-if [ $PDF == "TRUE" ]; then
-echo "Generating PDF"
-pandoc -s ${paramTOC} ${paramNUMBERSECTIONS} ${paramCITE} --file-scope --pdf-engine=xelatex --from markdown+header_attributes -H ../CONFIG/header.tex --listings -o "../${BOOKFILENAME}.pdf" ../tmp/metadata-info.yaml ../CONFIG/metadata-pdf.yaml "T-E-M-P-${BOOKFILENAME}.md" 
-fi
+else
+    echo "Merge into separate files"
+    
+    # Each file can contain YAML metadata for pandoc. We don't want the master metadata in each document
+    METADATAINFO=""
 
-# EPUB
-if [ $EPUB == "TRUE" ]; then
-echo "Generating EPUB"
-pandoc -s ${paramNUMBERSECTIONS} --file-scope ${paramCITE} --from markdown -o "../${BOOKFILENAME}.epub" ../tmp/metadata-info.yaml ../CONFIG/metadata-epub.yaml "T-E-M-P-${BOOKFILENAME}.md"
-fi
+    for f in CONTENT/*.md
+    do
+        FILENAME=${f##*/}
+        BASENAME=${FILENAME%.*}
+        BOOKFILENAME=${BASENAME}
+        echo "${f} filename ${FILENAME} basename ${BASENAME}"
+        
+        # copy single file to tmp
+        cp "${f}" "tmp/T-E-M-P-${BOOKFILENAME}-intermediate.md"
+        
+        # Call function to render documents
+        render_documents
 
-# Word DOCX
-if [ $DOCX == "TRUE" ]; then
-echo "Generating DOCX"
-pandoc -s ${paramTOC} ${paramNUMBERSECTIONS} --file-scope ${paramCITE} --from markdown -o "../${BOOKFILENAME}.docx" ../tmp/metadata-info.yaml "T-E-M-P-${BOOKFILENAME}.md"
-fi
-
-# HTML snippet .htm
-if [ $HTM == "TRUE" ]; then
-echo "Making HTML snippet"
-pandoc --file-scope ${paramCITE} --from markdown -o "../${BOOKFILENAME}.htm" ../tmp/metadata-info.yaml "T-E-M-P-${BOOKFILENAME}.md"
-fi
-
-# HTML standalone .html
-if [ $HTML == "TRUE" ]; then
-echo "Generating HTML standalone"
-pandoc -s ${paramTOC} ${paramNUMBERSECTIONS} --file-scope ${paramCITE} --from markdown -o "../${BOOKFILENAME}.html" ../tmp/metadata-info.yaml "T-E-M-P-${BOOKFILENAME}.md"
-fi
-
-# Markdown
-if [ $MARKDOWN == "TRUE" ]; then
-echo "Generating Markdown"
-pandoc -s ${paramTOC} ${paramNUMBERSECTIONS} --file-scope ${paramCITE} -t markdown --from markdown -o "../${BOOKFILENAME}.md" ../tmp/metadata-info.yaml "T-E-M-P-${BOOKFILENAME}.md"
-fi
-
-# Plain Text
-if [ $PLAINTXT == "TRUE" ]; then
-echo "Generating Plain Text"
-pandoc -s ${paramTOC} ${paramNUMBERSECTIONS} --file-scope ${paramCITE} -t plain --from markdown -o "../${BOOKFILENAME}.txt" ../tmp/metadata-info.yaml "T-E-M-P-${BOOKFILENAME}.md"
+    done
 fi
 
 # REMOVE temporary files
-rm "T-E-M-P-${BOOKFILENAME}.md"
-rm ../tmp/*
+rm tmp/*
+
