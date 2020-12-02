@@ -21,12 +21,8 @@ find . -type f -name '*~' -exec rm -f '{}' \;
 # Unless you are working with symlinks, leave the following line untouched.
 PATHDATA="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-
 # funtion to render documents
 render_documents () {
-
-    ls -l
-    ls -l tmp/
 
     #########################################################
     # 2. Replace strings with special vars in content and metadata 
@@ -48,12 +44,21 @@ render_documents () {
     # 4. Convert 
     # Now we move into the CONTENT folder to keep relative paths intact (img etc.)
     cd CONTENT
-    head "T-E-M-P-${BOOKFILENAME}.md"
 
     # PDF
     if [ $PDF == "TRUE" ]; then
     echo "Generating PDF"
     pandoc -s ${paramTOC} ${paramNUMBERSECTIONS} ${paramCITE} --file-scope --pdf-engine=xelatex --from markdown+header_attributes -H ../CONFIG/header.tex --listings -o "../${BOOKFILENAME}.pdf" ${METADATAINFO} ../CONFIG/metadata-pdf.yaml "T-E-M-P-${BOOKFILENAME}.md" 
+        # PDF small
+        if [ $PDFsmall == "TRUE" ]; then
+        echo "Generating small PDF"
+        ghostscript -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/printer -dNOPAUSE -dQUIET -dBATCH -sOutputFile="../${BOOKFILENAME}-small.pdf" "../${BOOKFILENAME}.pdf"
+        fi
+        # PDF very small
+        if [ $PDFsmall == "TRUE" ]; then
+        echo "Generating very small PDF"
+        ghostscript -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/ebook -dNOPAUSE -dQUIET -dBATCH -sOutputFile="../${BOOKFILENAME}-tiny.pdf" "../${BOOKFILENAME}.pdf"
+        fi
     fi
     
     # EPUB

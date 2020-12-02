@@ -25,6 +25,7 @@ if [ ! -d "${folderName}" ]; then
     mkdir "${folderName}"
     # Copy required scripts / files
     cp 00-PanBookMachine-boilerplate/cli_pandocEbook.sh "${folderName}"/
+    cp 00-PanBookMachine-boilerplate/cli_html2md.sh "${folderName}"/
     mkdir "${folderName}"/CONTENT
     mkdir "${folderName}"/CONTENT/img
     mkdir "${folderName}"/CONFIG
