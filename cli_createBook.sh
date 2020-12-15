@@ -24,11 +24,12 @@ if [ ! -d "${folderName}" ]; then
     # Directory doesn't exist.
     mkdir "${folderName}"
     # Copy required scripts / files
-    cp 00-PanBookMachine-boilerplate/cli_pandocEbook.sh "${folderName}"/
-    cp 00-PanBookMachine-boilerplate/cli_html2md.sh "${folderName}"/
+    cp 00-PanBookMachine-boilerplate/cli_panbookmachine.sh "${folderName}"/
+    cp 00-PanBookMachine-boilerplate/helper_html2md.sh "${folderName}"/
     mkdir "${folderName}"/CONTENT
     mkdir "${folderName}"/CONTENT/img
     mkdir "${folderName}"/CONFIG
+    mkdir "${folderName}"/PROCESSED
     cp -R 00-PanBookMachine-boilerplate/CONFIG/* "${folderName}"/CONFIG/
     mkdir "${folderName}"/CITATIONS
     cp -R 00-PanBookMachine-boilerplate/CITATIONS/* "${folderName}"/CITATIONS/

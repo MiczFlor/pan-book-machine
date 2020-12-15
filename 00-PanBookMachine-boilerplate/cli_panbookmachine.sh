@@ -128,6 +128,22 @@ sed -i "s/%TODAYFILE%/${TODAYFILE}/g" tmp/book.conf
 . "${PATHDATA}/tmp/book.conf"
 
 #################################
+# Pre-process files
+
+# Pre-process HTML files?
+if [ $PPHTML == "TRUE" ]; then
+    for f in CONTENT/*.html
+    do
+        echo "Generating Markdown for ${f} filename ${FILENAME} basename ${BASENAME}"
+        FILENAME=${f##*/}
+        BASENAME=${FILENAME%.*}
+        pandoc -s -t markdown_github-raw_html --from html -o "CONTENT/${BASENAME}.md" ${f}
+        # move original file to other folder
+        mv ${f} PROCESSED/
+    done
+fi
+
+#################################
 # Prepare some parameter settings
 
 if [ $NUMBERSECTIONS == "TRUE" ]; then
