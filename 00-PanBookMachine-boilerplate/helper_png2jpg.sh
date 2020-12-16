@@ -1,17 +1,15 @@
 #!/bin/bash
 #
-# This file converts all .png files inside the folder CONTENT/img
-# into .jpg files
-# files MUST have the ending .png
+# * Converts all .png files inside the folder CONTENT/img into .jpg files
+#
+# The original files will be moved into the folder PROCESSED.
+# The original file name remains intact but gets a suffix containing date and time
+#
+# Files MUST have the ending .png
 #
 # WARNING:
-# This script will potentially overwrite files. If you have the
-# scripts appendix.html and appendix.md in the CONTENT folder,
-# it will read appendix.html, convert it to markdown and save
-# it as appendix.md - thus overwriting the existing document.
+# This script will potentially overwrite files.
 #
-# By default it will keep the html files in the folder.
-# 
 # YOU SHOULD NOT NEED TO EDIT ANYTHING IN THIS FILE
 #
 # configure your book creation process in the config file:
@@ -24,14 +22,16 @@
 #
 ###########################################################
 
+NOW=`date '+%Y_%m_%d_%H_%M_%S'`;
+
 for f in CONTENT/img/*.png
 do
     FILENAME=${f##*/}
     BASENAME=${FILENAME%.*}
-    echo "convert ${f} CONTENT/img/${BASENAME}.jpg"
-    convert ${f} CONTENT/img/${BASENAME}.jpg
-    echo "mv ${f} PROCESSED/"
-    mv ${f} PROCESSED/
+    echo "mv ${f} PROCESSED/${BASENAME}-${NOW}.png"
+    mv ${f} PROCESSED/${BASENAME}-${NOW}.png
+    echo "convert PROCESSED/${BASENAME}-${NOW}.png CONTENT/img/${BASENAME}.jpg"
+    convert PROCESSED/${BASENAME}-${NOW}.png CONTENT/img/${BASENAME}.jpg
 done
 
 

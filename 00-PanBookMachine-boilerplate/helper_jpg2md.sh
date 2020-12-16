@@ -5,12 +5,7 @@
 # The markdown file will embed these images.
 #
 # WARNING:
-# This script will potentially overwrite files. If you have the
-# scripts appendix.html and appendix.md in the CONTENT folder,
-# it will read appendix.html, convert it to markdown and save
-# it as appendix.md - thus overwriting the existing document.
-#
-# By default it will keep the html files in the folder.
+# This script will potentially overwrite files. 
 # 
 # YOU SHOULD NOT NEED TO EDIT ANYTHING IN THIS FILE
 #
@@ -26,7 +21,6 @@
 
 # ? File name for created md file ?
 read -r -p "Filename please (without the .md ending): " fileNameMd
-
 
 for f in CONTENT/img/*.jpg
 do
