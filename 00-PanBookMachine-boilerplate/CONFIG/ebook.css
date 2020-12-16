@@ -36,6 +36,11 @@ p.rights {
 p.date { 
     text-align:center; 
 }
+/* fixing kobo image problem: images not tooooo big */
+img { 
+    max-width:100%; 
+    max-height:100%;
+}
 
 ol.toc { padding: 0; margin-left: 1em; }
 ol.toc li { list-style-type: none; margin: 0; padding: 0; }
