@@ -25,7 +25,7 @@ if [ ! -d "${folderName}" ]; then
     mkdir "${folderName}"
     # Copy required scripts / files
     cp 00-PanBookMachine-boilerplate/cli_panbookmachine.sh "${folderName}"/
-    cp 00-PanBookMachine-boilerplate/helper_html2md.sh "${folderName}"/
+    cp 00-PanBookMachine-boilerplate/helper*.sh "${folderName}"/
     mkdir "${folderName}"/CONTENT
     mkdir "${folderName}"/CONTENT/img
     mkdir "${folderName}"/CONFIG

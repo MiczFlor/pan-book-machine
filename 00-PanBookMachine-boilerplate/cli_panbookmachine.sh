@@ -21,7 +21,7 @@ find . -type f -name '*~' -exec rm -f '{}' \;
 # Unless you are working with symlinks, leave the following line untouched.
 PATHDATA="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-# funtion to render documents
+# function to render documents
 render_documents () {
 
     #########################################################
@@ -48,14 +48,14 @@ render_documents () {
     # PDF
     if [ $PDF == "TRUE" ]; then
     echo "Generating PDF"
-    pandoc -s ${paramTOC} ${paramNUMBERSECTIONS} ${paramCITE} --file-scope --pdf-engine=xelatex --from markdown+header_attributes -H ../CONFIG/header.tex --listings -o "../${BOOKFILENAME}.pdf" ${METADATAINFO} ../CONFIG/metadata-pdf.yaml "T-E-M-P-${BOOKFILENAME}.md" 
+    pandoc -s ${paramTOC} ${paramTOF} ${paramTOT} ${paramNUMBERSECTIONS} ${paramCITE} --file-scope --pdf-engine=xelatex --from markdown+header_attributes -H ../CONFIG/header.tex --listings -o "../${BOOKFILENAME}.pdf" ${METADATAINFO} ../CONFIG/metadata-pdf.yaml "T-E-M-P-${BOOKFILENAME}.md" 
         # PDF small
         if [ $PDFsmall == "TRUE" ]; then
         echo "Generating small PDF"
         ghostscript -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/printer -dNOPAUSE -dQUIET -dBATCH -sOutputFile="../${BOOKFILENAME}-small.pdf" "../${BOOKFILENAME}.pdf"
         fi
         # PDF very small
-        if [ $PDFsmall == "TRUE" ]; then
+        if [ $PDFtiny == "TRUE" ]; then
         echo "Generating very small PDF"
         ghostscript -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/ebook -dNOPAUSE -dQUIET -dBATCH -sOutputFile="../${BOOKFILENAME}-tiny.pdf" "../${BOOKFILENAME}.pdf"
         fi
@@ -123,6 +123,7 @@ sed -i "s/%TODAY%/${TODAY}/g" tmp/book.conf
 TODAYFILE=$(LC_ALL=${LANG_LOCALE}.utf8 date +"${DATE_FORMAT_FILE}")
 sed -i "s/%TODAYFILE%/${TODAYFILE}/g" tmp/metadata-info.yaml
 sed -i "s/%TODAYFILE%/${TODAYFILE}/g" tmp/book.conf
+TIMESTAMP=$(LC_ALL=${LANG_LOCALE}.utf8 date +"%Y%m%d-%H-%M-%S")
 
 # read book metadata / configuration
 . "${PATHDATA}/tmp/book.conf"
@@ -152,10 +153,25 @@ else
     paramNUMBERSECTIONS=""
 fi
 
+# table of contents
 if [ $TOC == "TRUE" ]; then
     paramTOC="--toc -V toc-depth:${TOCDEPTH}"
 else
     paramTOC=""
+fi
+
+# table of figures
+if [ $TOF == "TRUE" ]; then
+    paramTOF="-V lof"
+else
+    paramTOF=""
+fi
+
+# table of tables
+if [ $TOT == "TRUE" ]; then
+    paramTOT="-V lot"
+else
+    paramTOT=""
 fi
 
 if [ $CITATIONSUSE == "TRUE" ]; then
@@ -188,6 +204,11 @@ fi
 # 1. preparing md docs (append empty line, opt. merge)
 
 echo Merge ${MERGE}
+
+# Backup all MD files in one (TRUE or FALSE)
+if [ $BACKUPMD == "TRUE" ]; then
+    for f in CONTENT/*.md ; do sed -e '$s/$/\n\n/' "$f" ; done > "misc/Backup-MD_${TIMESTAMP}.md"
+fi
 
 # Merge files into one document (TRUE) or keep separate (FALSE)
 if [ $MERGE == "TRUE" ]; then

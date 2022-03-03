@@ -3,5 +3,7 @@ geometry: "top=2.5cm, bottom=2cm, left=2.5cm, right=2.5cm"
 papersize: a4
 documentclass: book
 fontsize: 10pt
+linestretch: 1
 mainfont: TeX Gyre Pagella
+monospace: TeX Gyre Cursor
 ...
