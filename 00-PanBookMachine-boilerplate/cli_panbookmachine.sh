@@ -73,6 +73,12 @@ render_documents () {
     pandoc -s ${paramTOC} ${paramNUMBERSECTIONS} --file-scope ${paramCITE} --from markdown -o "../${BOOKFILENAME}.docx" ${METADATAINFO} "T-E-M-P-${BOOKFILENAME}.md"
     fi
     
+    # RTF Document
+    if [ $RTF == "TRUE" ]; then
+    echo "Generating RTF"
+    pandoc -s ${paramTOC} ${paramNUMBERSECTIONS} --file-scope ${paramCITE} --from markdown -o "../${BOOKFILENAME}.rtf" ${METADATAINFO} "T-E-M-P-${BOOKFILENAME}.md"
+    fi
+    
     # HTML snippet .htm
     if [ $HTM == "TRUE" ]; then
     echo "Making HTML snippet"
@@ -138,9 +144,35 @@ if [ $PPHTML == "TRUE" ]; then
         echo "Generating Markdown for ${f} filename ${FILENAME} basename ${BASENAME}"
         FILENAME=${f##*/}
         BASENAME=${FILENAME%.*}
-        pandoc -s -t markdown_github-raw_html --from html -o "CONTENT/${BASENAME}.md" ${f}
+        pandoc -s -t markdown_github-raw_html --from html -o "CONTENT/${BASENAME}.md" "${f}"
         # move original file to other folder
         mv ${f} PROCESSED/
+    done
+fi
+
+# Pre-process DOCX files?
+if [ $PPDOCX == "TRUE" ]; then
+    for f in CONTENT/*.docx
+    do
+        echo "Generating Markdown for ${f} filename ${FILENAME} basename ${BASENAME}"
+        FILENAME=${f##*/}
+        BASENAME=${FILENAME%.*}
+        pandoc -s -t markdown_github-raw_html -o "CONTENT/${BASENAME}.md" "${f}"
+        # move original file to other folder
+        mv "${f}" PROCESSED/
+    done
+fi
+
+# Pre-process DOC files?
+if [ $PPDOCX == "TRUE" ]; then
+    for f in CONTENT/*.doc
+    do
+        echo "Generating Markdown for ${f} filename ${FILENAME} basename ${BASENAME}"
+        FILENAME=${f##*/}
+        BASENAME=${FILENAME%.*}
+        pandoc -s -t markdown_github-raw_html -o "CONTENT/${BASENAME}.md" "${f}"
+        # move original file to other folder
+        mv "${f}" PROCESSED/
     done
 fi
 
