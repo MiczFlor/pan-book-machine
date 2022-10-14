@@ -91,6 +91,12 @@ render_documents () {
     pandoc -s ${paramTOC} ${paramNUMBERSECTIONS} --file-scope ${paramCITE} --from markdown -o "../${BOOKFILENAME}.html" ${METADATAINFO} "T-E-M-P-${BOOKFILENAME}.md"
     fi
     
+    # Reveal JS slideshow standalone .html
+    if [ $REVEALJS == "TRUE" ]; then
+    echo "Generating Reveal JS slideshow standalone"
+    pandoc -t revealjs -s -o "../${BOOKFILENAME}.html" "T-E-M-P-${BOOKFILENAME}.md" -V revealjs-url=https://unpkg.com/reveal.js@3.9.2
+    fi
+    
     # Markdown
     if [ $MARKDOWN == "TRUE" ]; then
     echo "Generating Markdown"
