@@ -36,6 +36,7 @@ if [ ! -d "${folderName}" ]; then
     # replace book name with given folder name
     sed -i 's/Pan-Book-Machine Manual/'"${folderName}"'/' "${folderName}"/CONFIG/book.conf
     mkdir "${folderName}"/misc
+    cp -R 00-PanBookMachine-boilerplate/misc/* "${folderName}"/misc/
     mkdir "${folderName}"/tmp
 else
     echo

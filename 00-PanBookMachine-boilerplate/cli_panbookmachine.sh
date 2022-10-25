@@ -94,7 +94,21 @@ render_documents () {
     # Reveal JS slideshow standalone .html
     if [ $REVEALJS == "TRUE" ]; then
     echo "Generating Reveal JS slideshow standalone"
-    pandoc -t revealjs -s -o "../${BOOKFILENAME}.html" "T-E-M-P-${BOOKFILENAME}.md" -V revealjs-url=https://unpkg.com/reveal.js@3.9.2
+    #echo "-s ${paramTOC} ${paramNUMBERSECTIONS} --file-scope ${paramCITE} --from markdown -t revealjs -o ../${BOOKFILENAME}.html T-E-M-P-${BOOKFILENAME}.md  ${METADATAINFO} -V revealjs-url=https://unpkg.com/reveal.js@3.9.2"
+    pandoc -s ${paramTOC} ${paramNUMBERSECTIONS} --file-scope ${paramCITE} --from markdown -t revealjs -o "../tmp/${BOOKFILENAME}.html" "T-E-M-P-${BOOKFILENAME}.md" ${METADATAINFO} ../CONFIG/metadata-revealjs.yaml -V revealjs-url=https://unpkg.com/reveal.js@3.9.2
+    cd ../tmp/
+    # copy images folder
+    cp -R "../CONTENT/img" ./
+    # create JS CSS folder from reveal ZIP
+    cp "../misc/reveal.js-3.9.2.zip" ./
+    unzip -q -o reveal.js-3.9.2.zip
+    # change links in html file to relative local links
+    sed -i "s/https:\/\/unpkg.com\/reveal.js\@3.9.2/reveal.js-3.9.2/g" "${BOOKFILENAME}.html"
+    sed -i "s/CONTENT\/img\//img\//g" "${BOOKFILENAME}.html"
+    # make zip file of HTML and
+    zip -q -r "${BOOKFILENAME}.html.zip" "${BOOKFILENAME}.html" reveal.js-3.9.2 img
+    mv "${BOOKFILENAME}.html.zip" ../
+    cd ../CONTENT/
     fi
     
     # Markdown
